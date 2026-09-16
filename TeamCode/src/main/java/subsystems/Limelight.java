@@ -1,7 +1,7 @@
 package subsystems;
 
 import com.arcrobotics.ftclib.command.Subsystem;
-import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
 
@@ -102,7 +102,8 @@ public class Limelight implements Subsystem {
                 double y = botPose.getPosition().y;
                 double r = botPose.getOrientation().getYaw();
                 Pose fieldPose = new Pose(x,y,r);
-                robot.drivetrain.setCurrentPose(fieldPose);
+                // TODO: RobotHardware has no `drivetrain` field yet - re-enable once it is added.
+                // robot.drivetrain.setCurrentPose(fieldPose);
             }
         }
     }

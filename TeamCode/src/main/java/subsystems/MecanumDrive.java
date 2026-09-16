@@ -4,16 +4,16 @@ import com.arcrobotics.ftclib.command.Subsystem;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathChain;
+import com.pedropathing.math.Pose;
+import com.pedropathing.paths.Path;
+import com.pedropathing.paths.interpolator.Interpolator;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.function.DoubleSupplier;
 
-import pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedro.Constants;
 import util.RobotHardware;
 
 public class MecanumDrive implements Subsystem {
@@ -25,7 +25,7 @@ public class MecanumDrive implements Subsystem {
 
     public MecanumDrive() {
         this.robot = RobotHardware.getInstance();
-        this.pose = new Pose();
+        this.pose = new Pose(0, 0, 0);
     }
 
     public Pose getCurrentPose() {
@@ -45,14 +45,10 @@ public class MecanumDrive implements Subsystem {
     }
 
     public Follower driveToPose(Pose target, HardwareMap hardwareMap) {
-        Pose a = new Pose();
-        Follower follower = Constants.createFollower(hardwareMap);
-        follower.activateAllPIDFs();
-        PathChain path = follower.pathBuilder()
-                .addPath(new BezierLine(getCurrentPose(), target))
-                .setLinearHeadingInterpolation(getCurrentPose().getHeading(), target.getHeading())
-                .build();
-        follower.followPath(path);
+        Follower follower = Constants.create(hardwareMap);
+        Path path = com.pedropathing.api.Paths.line(getCurrentPose(), target)
+                .heading(Interpolator.linear(getCurrentPose().heading(), target.heading()));
+        follower.follow(path);
         return follower;
     }
 

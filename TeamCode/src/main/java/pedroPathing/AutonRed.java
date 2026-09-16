@@ -1,4 +1,4 @@
-package PedroPathing;
+package pedroPathing;
 
 public class AutonRed {
 }

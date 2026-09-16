@@ -1,6 +1,7 @@
 repositories {
     mavenCentral()
     maven { url 'https://repo.dairy.foundation/releases/'}
+    maven { url 'https://mymaven.bylazar.com/releases'} // Panels
     google() // Needed for androidx
 }
 
@@ -19,4 +20,8 @@ dependencies {
 
     implementation 'com.pedropathing:revhub:3.0.0'
     implementation 'com.pedropathing:tuning:1.0.0'
+
+    implementation 'com.bylazar:telemetry:1.0.5'
+    implementation 'com.bylazar:configurables:1.0.5'
+    implementation 'com.bylazar:field:1.0.7'
 }
