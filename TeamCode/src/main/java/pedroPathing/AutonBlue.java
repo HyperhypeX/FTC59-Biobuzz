@@ -4,6 +4,7 @@ import static com.pedropathing.api.Paths.curve;
 import static com.pedropathing.api.Paths.line;
 import static com.pedropathing.api.Paths.path;
 
+import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
@@ -23,20 +24,13 @@ public class AutonBlue extends OpMode {
     private int pathState;
 
     // Poses
-    private final Pose startPoseBottom = new Pose(12, 60, Math.toRadians(90));
-    private final Pose startPoseTop = new Pose(120,120, Math.toRadians(315));
-    private final Pose row1Control = new Pose(48, 72, Math.toRadians(270));
-    private final Pose row1Start = new Pose(36, 96, Math.toRadians(270));
-    private final Pose row1End = new Pose(36, 120, Math.toRadians(270));
-    private final Pose row2Control = new Pose(48, 72, Math.toRadians(270));
-    private final Pose row2Start = new Pose(60, 96, Math.toRadians(270));
-    private final Pose row2End = new Pose(60, 120, Math.toRadians(270));
-    private final Pose row3Control = new Pose(72, 72, Math.toRadians(270));
-    private final Pose row3Start = new Pose(84, 96, Math.toRadians(270));
-    private final Pose row3End = new Pose(84, 120, Math.toRadians(270));
-    private final Pose scorePoseTop = new Pose(84, 60, Math.toRadians(135));
-    private final Pose scorePoseBottom = new Pose(12, 84, Math.toRadians(90));
-
+    private final PoseFactory poseFactory = PoseFactory.degrees();
+    private final Pose autonRed1 = poseFactory.of(56, 8, 90);
+    private final Pose moveToShoot = poseFactory.of(56, 36, 90);
+    private final Pose loadingWall = poseFactory.of(5, 36, 270);
+    private final Pose point3 = poseFactory.of(5, 5, 270);
+    private final Pose loadingSpot = poseFactory.of(55.6777, 36, 90);
+    private final Pose returnPose = poseFactory.of(60, 3, 90);
     // Paths
     private Path row1, row2, row3, pickup1, pickup2, pickup3, score, score1, score2, score3;
 
@@ -44,37 +38,7 @@ public class AutonBlue extends OpMode {
     private Outtake outtake;
 
     public void buildPaths() {
-//        score = line(startPoseTop, scorePoseTop)
-//                .heading(Interpolator.linear(startPoseTop.heading(), scorePoseTop.heading()));
-        row3 = curve(scorePoseBottom, row3Control, row3Start)
-                .heading(Interpolator.linear(scorePoseBottom.heading(), row3Start.heading()));
-        pickup3 = path(
-                line(row3Start, row3End)
-                        .heading(Interpolator.linear(row3Start.heading(), row3End.heading())),
-                line(row3End, row3Start)
-                        .heading(Interpolator.linear(row3End.heading(), row3Start.heading())));
-        score3 = curve(row3Start, row3Control, scorePoseBottom)
-                .heading(Interpolator.linear(row3Start.heading(), scorePoseBottom.heading()));
 
-        row2 = curve(scorePoseBottom, row2Control, row2Start)
-                .heading(Interpolator.linear(scorePoseBottom.heading(), row2Start.heading()));
-        pickup2 = path(
-                line(row2Start, row2End)
-                        .heading(Interpolator.linear(row2Start.heading(), row2End.heading())),
-                line(row2End, row2Start)
-                        .heading(Interpolator.linear(row2End.heading(), row2Start.heading())));
-        score2 = curve(row2Start, row2Control, scorePoseBottom)
-                .heading(Interpolator.linear(row2Start.heading(), scorePoseBottom.heading()));
-
-        row1 = curve(scorePoseBottom, row1Control, row1Start)
-                .heading(Interpolator.linear(scorePoseBottom.heading(), row1Start.heading()));
-        pickup1 = path(
-                line(row1Start, row1End)
-                        .heading(Interpolator.linear(row1Start.heading(), row1End.heading())),
-                line(row1End, row1Start)
-                        .heading(Interpolator.linear(row1End.heading(), row1Start.heading())));
-        score1 = curve(row1Start, row1Control, scorePoseBottom)
-                .heading(Interpolator.linear(row1Start.heading(), scorePoseBottom.heading()));
     }
 
     public void autonomousPathUpdate() {
@@ -203,9 +167,9 @@ public class AutonBlue extends OpMode {
         opmodeTimer.reset();
 
 
-        follower = org.firstinspires.ftc.teamcode.pedro.Constants.create(hardwareMap);
+        follower = Constants.create(hardwareMap);
         buildPaths();
-        follower.setPose(startPoseTop);
+        follower.setPose(autonRed1);
 
         intake = new Intake();
         outtake = new Outtake();

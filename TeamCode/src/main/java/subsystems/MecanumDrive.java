@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.function.DoubleSupplier;
 
-import org.firstinspires.ftc.teamcode.pedro.Constants;
+import pedroPathing.Constants;
 import util.RobotHardware;
 
 public class MecanumDrive implements Subsystem {

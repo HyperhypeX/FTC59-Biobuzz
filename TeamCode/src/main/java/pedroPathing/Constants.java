@@ -1,17 +1,14 @@
 package pedroPathing;
 
-import com.pedropathing.control.FilteredPIDFCoefficients;
-import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.algorithm.Foresight;
+import com.pedropathing.algorithm.ForesightConfig;
+import com.pedropathing.controllers.PIDController;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.follower.FollowerConstants;
-import com.pedropathing.ftc.FollowerBuilder;
-import com.pedropathing.ftc.drivetrains.MecanumConstants;
-import com.pedropathing.ftc.localization.Encoder;
-import com.pedropathing.ftc.localization.constants.PinpointConstants;
-import com.pedropathing.ftc.localization.constants.TwoWheelConstants;
-import com.pedropathing.paths.PathConstraints;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.*;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.pedropathing.revhub.drivetrains.Mecanum;
+import com.pedropathing.revhub.drivetrains.MecanumConfig;
+import com.pedropathing.revhub.localizers.PinpointConfig;
+import com.pedropathing.revhub.localizers.PinpointLocalizer;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -20,63 +17,44 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import util.RobotConstants;
 
 public class Constants {
-    public static FollowerConstants followerConstants = new FollowerConstants()
-            // TODO: Configure robot mass
-            .mass(7.5)
-            // TODO: Tune these (https://pedropathing.com/docs/pathing/tuning/automatic)
-//            // Max robot acceleration in 48 in (Foward/LateralZeroPowerAccelerationTuner)
-            .forwardZeroPowerAcceleration(-28.55)
-            .lateralZeroPowerAcceleration(-33.88)
-            .useSecondaryTranslationalPIDF(true)
-            .useSecondaryHeadingPIDF(true)
-            .useSecondaryDrivePIDF(true)
-            // TODO: Tune these (https://pedropathing.com/docs/pathing/tuning/pids/translational and heading and drive)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.3,0,0.05,0))
-            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.05,0, 0.01,0))
-            .headingPIDFCoefficients(new PIDFCoefficients(0.7,0,0.01,0))
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1,0, 0, 0))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.025,0.01, 0.0001,0.6,0.01))
-            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.02,0.01, 0.00001,0.6,0.01))
-            .centripetalScaling(0.00075);
+    public static MecanumConfig drivetrainConfig = new MecanumConfig(c -> {
+        c.frontLeftName.set(RobotConstants.Drivetrain.leftFront);
+        c.backLeftName.set(RobotConstants.Drivetrain.leftRear);
+        c.frontRightName.set(RobotConstants.Drivetrain.rightFront);
+        c.backRightName.set(RobotConstants.Drivetrain.rightRear);
+        // TODO: Check whether these reverses are correct
+        c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
+        c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
+        c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
+        c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
+    });
 
-    public static MecanumConstants driveConstants = new MecanumConstants()
-            .maxPower(0.7)
-            .rightFrontMotorName(RobotConstants.Drivetrain.rightFront)
-            .rightRearMotorName(RobotConstants.Drivetrain.rightRear)
-            .leftRearMotorName(RobotConstants.Drivetrain.leftRear)
-            .leftFrontMotorName(RobotConstants.Drivetrain.leftFront)
-            // TODO: Check whether these reverses are correct
-            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            // TODO: Tune these (https://pedropathing.com/docs/pathing/tuning/automatic)
-//            // Max robot velocity in 48 inches (length can be changed in Forward/LateralVelocityTuner but larger numbers are better)
-            .xVelocity(20) // 84.44
-            .yVelocity(20); // 67.30
+    // Offsets carried over from the 2.x config (forwardPodY -> xPodOffset, strafePodX -> yPodOffset).
+    // Re-run the Pinpoint Tuner to confirm: it prints this whole block with measured values.
+    public static PinpointConfig localizerConfig = new PinpointConfig(c -> {
+        c.name.set("pinpoint");
+        c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        c.xPodOffset.set(2.5);
+        c.yPodOffset.set(2.5);
+        c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        c.globalDistanceUnit.set(DistanceUnit.INCH);
+        c.offsetUnits.set(DistanceUnit.INCH);
+    });
 
-    public static PinpointConstants localizerConstants = new PinpointConstants()
-            // Pod offsets from center
-            .forwardPodY(2.5)
-            .strafePodX(2.5)
-            .distanceUnit(DistanceUnit.INCH)
-            .hardwareMapName("pinpoint")
-            .encoderResolution(GoBildaOdometryPods.goBILDA_4_BAR_POD)
-            // TODO: Tune these (https://pedropathing.com/docs/pathing/tuning/localization/two-wheel)
-//            // Encoder directions (reverse if needed)
-            .forwardEncoderDirection(EncoderDirection.REVERSED)
-            .strafeEncoderDirection(EncoderDirection.FORWARD);
-//            // Multipliers (adjust perceived to real units)
-//            .forwardTicksToInches(1.0)
-//            .strafeTicksToInches(1.0);
+    // P/I/D carried over from the 2.x coefficients, whose F terms were all 0 so nothing is lost.
+    // TODO: mass, xVelocity/yVelocity and the zero-power accelerations have no 3.0.0 equivalent.
+    // Run the tuners for maxAchievableForwardVelocity / naturalForwardDeceleration and friends.
+    public static ForesightConfig algorithmConfig = new ForesightConfig(c -> {
+        c.forwardTranslational.set(new PIDController(0.3, 0, 0.05));
+        c.strafeTranslational.set(new PIDController(0.3, 0, 0.05));
+        c.headingFeedback.set(new PIDController(0.7, 0, 0.01));
+    });
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
-
-    public static Follower createFollower(HardwareMap hardwareMap) {
-        return new FollowerBuilder(followerConstants, hardwareMap)
-                .pinpointLocalizer(localizerConstants)
-                .pathConstraints(pathConstraints)
-                .mecanumDrivetrain(driveConstants)
-                .build();
+    public static Follower create(HardwareMap hardwareMap) {
+        return new Follower(
+                new PinpointLocalizer(hardwareMap, localizerConfig),
+                new Mecanum(hardwareMap, drivetrainConfig),
+                new Foresight(algorithmConfig));
     }
 }

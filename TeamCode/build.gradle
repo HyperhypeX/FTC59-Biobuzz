@@ -22,19 +22,6 @@ android {
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
-
-    // Last season's Pedro Pathing 2.x files. They do not compile against 3.0.0 and
-    // nothing references them anymore. Delete a line here once the file is ported.
-    sourceSets {
-        main {
-            java {
-                exclude 'pedroPathing/Constants.java'
-                exclude 'pedroPathing/Tuning.java'
-                exclude 'pedroPathing/TestPath.java'
-                exclude 'pedroPathing/TimeBasedAuto.java'
-            }
-        }
-    }
 }
 
 dependencies {
