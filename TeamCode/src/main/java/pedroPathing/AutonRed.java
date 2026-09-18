@@ -2,6 +2,7 @@ package pedroPathing;
 
 import static com.pedropathing.api.Paths.*;
 
+import com.bylazar.field.Line;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
@@ -37,11 +38,12 @@ public class AutonRed extends LinearOpMode {
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
-                follow(follower, moveToShoot()),
-                follow(follower, loadingWall()),
-                follow(follower, path3()),
-                follow(follower, loadingSpot()),
-                follow(follower, returnPose()),
+                //Case 1
+                follow(follower, line(autonRed1, moveToShoot).linear(autonRed1, moveToShoot)),
+                follow(follower, line(moveToShoot, loadingWall).linear(moveToShoot, loadingWall)),
+                follow(follower, line(loadingWall, point3).linear(loadingWall, point3)),
+                follow(follower, line(point3, loadingSpot).linear(point3, loadingSpot)),
+                follow(follower, line(loadingSpot, returnPose).linear(loadingSpot, returnPose)),
                 hold(follower)
         );
     }
@@ -71,25 +73,5 @@ public class AutonRed extends LinearOpMode {
 
             telemetry.update();
         }
-    }
-
-    public Path moveToShoot() {
-        return line(autonRed1, moveToShoot).linear(autonRed1, moveToShoot);
-    }
-
-    public Path loadingWall() {
-        return line(moveToShoot, loadingWall).linear(moveToShoot, loadingWall);
-    }
-
-    public Path path3() {
-        return line(loadingWall, point3).linear(loadingWall, point3);
-    }
-
-    public Path loadingSpot() {
-        return line(point3, loadingSpot).linear(point3, loadingSpot);
-    }
-
-    public Path returnPose() {
-        return line(loadingSpot, returnPose).linear(loadingSpot, returnPose);
     }
 }
