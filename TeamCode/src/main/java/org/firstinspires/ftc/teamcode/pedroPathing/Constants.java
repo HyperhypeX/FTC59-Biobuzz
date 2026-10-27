@@ -22,11 +22,11 @@ public class Constants {
         c.backLeftName.set(RobotConstants.Drivetrain.leftRear);
         c.frontRightName.set(RobotConstants.Drivetrain.rightFront);
         c.backRightName.set(RobotConstants.Drivetrain.rightRear);
-        // TODO: Check whether these reverses are correct
-        c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
-        c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
-        c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
-        c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
+        // Same values RobotHardware applies for TeleOp - edit them in RobotConstants.
+        c.frontLeftDirection.set(RobotConstants.Drivetrain.leftFrontDirection);
+        c.backLeftDirection.set(RobotConstants.Drivetrain.leftRearDirection);
+        c.frontRightDirection.set(RobotConstants.Drivetrain.rightFrontDirection);
+        c.backRightDirection.set(RobotConstants.Drivetrain.rightRearDirection);
     });
 
     // Offsets carried over from the 2.x config (forwardPodY -> xPodOffset, strafePodX -> yPodOffset).

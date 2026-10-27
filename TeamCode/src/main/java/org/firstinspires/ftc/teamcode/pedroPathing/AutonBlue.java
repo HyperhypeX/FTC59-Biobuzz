@@ -16,7 +16,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.util.RobotConstants;
 
-@Autonomous(name = "AutonBlue", group = "Autonomous")
+// @Autonomous is off on purpose: buildPaths() is still empty, so row1/pickup1/score1 are
+// null and the first case would NPE. Re-enable once the paths are actually built.
+//@Autonomous(name = "AutonBlue", group = "Autonomous")
 public class AutonBlue extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;

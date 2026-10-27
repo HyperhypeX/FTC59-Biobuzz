@@ -56,9 +56,6 @@ public class MecanumDrive implements Subsystem {
     }
 
     public void drive(double ly, double lx, double rx) {
-        robot.telemetryManager.debug(String.format("driving %f %f %f", ly, lx, rx));
-        robot.telemetryManager.update();
-
         // No IMU in the config means no field-centric frame, so fall back to robot-centric.
         heading = robot.imu == null
                 ? 0

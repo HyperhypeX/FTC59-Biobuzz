@@ -62,18 +62,21 @@ public class RobotHardware {
         rightRear = hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.rightRear);
         rightFront = hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.rightFront);
 
-        leftFront.setDirection(DcMotorEx.Direction.REVERSE); // MAYBE CHANGE
-//        rightRear.setDirection(DcMotorEx.Direction.REVERSE); // MAYBE CHANGE
-        leftRear.setDirection(DcMotorEx.Direction.REVERSE); // MAYBE CHANGE
-//        rightFront.setDirection(DcMotorEx.Direction.REVERSE); // MAYBE CHANGE
+        // Directions live in RobotConstants so auton and TeleOp cannot disagree.
+        leftFront.setDirection(RobotConstants.Drivetrain.leftFrontDirection);
+        leftRear.setDirection(RobotConstants.Drivetrain.leftRearDirection);
+        rightFront.setDirection(RobotConstants.Drivetrain.rightFrontDirection);
+        rightRear.setDirection(RobotConstants.Drivetrain.rightRearDirection);
 
-        // TODO: LogoFacingDirection/UsbFacingDirection must match how the Control Hub is
-        // actually bolted on, or field-centric drive will be rotated by a fixed offset.
+        // Hub mounts logo-up.
+        // TODO: Confirm UsbFacingDirection once the hub is bolted on - it must name the
+        // direction the USB ports physically point (FORWARD/BACKWARD/LEFT/RIGHT). Wrong
+        // value rotates field-centric drive by a fixed offset.
         imu = hardwareMap.tryGet(IMU.class, "imu");
         if (imu != null) {
             IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                    RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, //
-                    RevHubOrientationOnRobot.UsbFacingDirection.UP
+                    RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                    RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
             ));
             imu.initialize(parameters);
             imu.resetYaw();
