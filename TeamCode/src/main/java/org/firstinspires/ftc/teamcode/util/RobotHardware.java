@@ -1,23 +1,15 @@
-package util;
+package org.firstinspires.ftc.teamcode.util;
 
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
-
-import subsystems.MecanumDrive;
 
 public class RobotHardware {
     // Drivetrain
@@ -75,26 +67,32 @@ public class RobotHardware {
         leftRear.setDirection(DcMotorEx.Direction.REVERSE); // MAYBE CHANGE
 //        rightFront.setDirection(DcMotorEx.Direction.REVERSE); // MAYBE CHANGE
 
-        imu = hardwareMap.get(IMU.class, "imu");
-//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-//                RevHubOrientationOnRobot.LogoFacingDirection.UP, //
-//                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
-//        ));
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, //
-                RevHubOrientationOnRobot.UsbFacingDirection.UP
-        ));
-        imu.initialize(parameters);
-        imu.resetYaw();
+        // TODO: LogoFacingDirection/UsbFacingDirection must match how the Control Hub is
+        // actually bolted on, or field-centric drive will be rotated by a fixed offset.
+        imu = hardwareMap.tryGet(IMU.class, "imu");
+        if (imu != null) {
+            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, //
+                    RevHubOrientationOnRobot.UsbFacingDirection.UP
+            ));
+            imu.initialize(parameters);
+            imu.resetYaw();
+        }
 
+        // Not on the skeleton robot yet, so these use tryGet and stay null when the
+        // config has no such device. get() would throw and kill the OpMode at init.
         // ******************* INTAKE ******************* //
-        intakeMotor = hardwareMap.get(DcMotorEx.class, RobotConstants.Intake.intake);
+        intakeMotor = hardwareMap.tryGet(DcMotorEx.class, RobotConstants.Intake.intake);
 
         // ******************* OUTTAKE ******************* //
-        outtakeMotor = hardwareMap.get(DcMotorEx.class, RobotConstants.Outtake.outtake);
-        outtakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
-        feederMotor = hardwareMap.get(DcMotorEx.class, RobotConstants.Outtake.feeder);
-        feederMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        outtakeMotor = hardwareMap.tryGet(DcMotorEx.class, RobotConstants.Outtake.outtake);
+        if (outtakeMotor != null) {
+            outtakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        }
+        feederMotor = hardwareMap.tryGet(DcMotorEx.class, RobotConstants.Outtake.feeder);
+        if (feederMotor != null) {
+            feederMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
 
         // ******************* LIMELIGHT ******************* //
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");

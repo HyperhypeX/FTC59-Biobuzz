@@ -1,4 +1,4 @@
-package subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.Subsystem;
 import com.pedropathing.math.Pose;
@@ -14,7 +14,7 @@ import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
-import util.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.RobotHardware;
 
 public class Limelight implements Subsystem {
     private static RobotHardware robot;

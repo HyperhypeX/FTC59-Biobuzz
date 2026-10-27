@@ -1,10 +1,10 @@
-package subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.Subsystem;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-import util.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.RobotHardware;
 
 public class Intake implements Subsystem {
     RobotHardware robot;

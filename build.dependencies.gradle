@@ -22,8 +22,9 @@ dependencies {
     implementation 'com.pedropathing:revhub:3.0.0'
     implementation 'com.pedropathing:tuning:1.0.0'
 
-    implementation 'com.bylazar:telemetry:1.0.5'
-    implementation 'com.bylazar:configurables:1.0.5'
-    implementation 'com.bylazar:field:1.0.7'
+    // fullpanels bundles the Panels core host (com.bylazar:panels) that
+    // PanelsTelemetry needs at runtime. The individual telemetry/configurables/field
+    // modules do NOT declare it, so using them alone crashes on the robot.
+    implementation 'com.bylazar:fullpanels:1.0.9'
 
 }

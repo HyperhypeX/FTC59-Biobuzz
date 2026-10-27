@@ -1,8 +1,6 @@
-package subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.Subsystem;
-import com.bylazar.telemetry.PanelsTelemetry;
-import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
@@ -11,10 +9,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-import java.util.function.DoubleSupplier;
-
-import pedroPathing.Constants;
-import util.RobotHardware;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.util.RobotHardware;
 
 public class MecanumDrive implements Subsystem {
     private RobotHardware robot;
@@ -63,7 +59,10 @@ public class MecanumDrive implements Subsystem {
         robot.telemetryManager.debug(String.format("driving %f %f %f", ly, lx, rx));
         robot.telemetryManager.update();
 
-        heading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        // No IMU in the config means no field-centric frame, so fall back to robot-centric.
+        heading = robot.imu == null
+                ? 0
+                : robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         double rotX = lx * Math.cos(-heading) - ly * Math.sin(-heading);
         double rotY = lx * Math.sin(-heading) + ly * Math.cos(-heading);
 

@@ -1,4 +1,4 @@
-package pedroPathing;
+package org.firstinspires.ftc.teamcode.pedroPathing;
 
 import static com.pedropathing.api.Paths.*;
 
@@ -17,8 +17,6 @@ import static com.pedropathing.ivy.pedro.PedroCommands.hold;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Autonomous(name = "AutoPath", group = "Autonomous")
 
