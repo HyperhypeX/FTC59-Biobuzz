@@ -32,10 +32,6 @@ public class RobotHardware {
 
     // Limelight
     public Limelight3A limelight;
-
-    // Color Sensor
-//    public ColorSensor colorSensor;
-
     public TelemetryManager telemetryManager;
 
     public static RobotHardware getInstance() {
@@ -82,8 +78,6 @@ public class RobotHardware {
             imu.resetYaw();
         }
 
-        // Not on the skeleton robot yet, so these use tryGet and stay null when the
-        // config has no such device. get() would throw and kill the OpMode at init.
         // ******************* INTAKE ******************* //
         intakeMotor = hardwareMap.tryGet(DcMotorEx.class, RobotConstants.Intake.intake);
 
@@ -96,16 +90,5 @@ public class RobotHardware {
         if (feederMotor != null) {
             feederMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
-
-        // ******************* LIMELIGHT ******************* //
-//        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-//        limelight.setPollRateHz(100);
-//        limelight.pipelineSwitch(0);
-//        limelight.start();
-
-        // ******************* COLOR SENSOR ******************* //
-//        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
     }
-
-
 }

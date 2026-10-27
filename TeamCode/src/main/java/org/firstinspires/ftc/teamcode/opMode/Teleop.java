@@ -48,9 +48,6 @@ public class Teleop extends CommandOpMode {
             outtake = new Outtake();
             configureOuttake();
         }
-        if (hasIntake && hasOuttake) {
-            configureJamClear();
-        }
 
         telemetry.addData("Drive mode", robot.imu != null ? "field-centric" : "ROBOT-CENTRIC (no imu in config)");
         telemetry.addData("Intake", hasIntake ? "ready" : "not in config - bindings off");
@@ -99,17 +96,18 @@ public class Teleop extends CommandOpMode {
     }
 
     //Reverse intake and feeder together to clear a jam.
-    private void configureJamClear() {
-        driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(new InstantCommand(() -> {
-                    outtake.setFeederPower(-1);
-                    intake.setIntakePower(-0.5);
-                }, outtake, intake))
-                .whenReleased(new InstantCommand(() -> {
-                    outtake.stopFeederMotor();
-                    intake.stopMotor();
-                }, outtake, intake));
-    }
+    // (Might need later but unnecessary for now)
+    //private void configureJamClear() {
+    //driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+    //.whenPressed(new InstantCommand(() -> {
+    //outtake.setFeederPower(-1);
+    //intake.setIntakePower(-0.5);
+    //}, outtake, intake))
+    //.whenReleased(new InstantCommand(() -> {
+    //outtake.stopFeederMotor();
+    //intake.stopMotor();
+    //}, outtake, intake));
+    //}
 
     private static double deadband(double value) {
         return Math.abs(value) > STICK_DEADBAND ? value : 0;
