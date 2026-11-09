@@ -27,6 +27,8 @@ public class RobotConstants {
     public static class Outtake {
         public static String outtake = "outtakeMotor";
         public static String feeder = "feederMotor";
+        public static String outtakeServo = "outtakeServo";
+        public static String stopServo = "stopServo";
         public static double feederVelocity = Math.PI*2;
         public static double outtakeVelocity = Math.PI*1;
     }

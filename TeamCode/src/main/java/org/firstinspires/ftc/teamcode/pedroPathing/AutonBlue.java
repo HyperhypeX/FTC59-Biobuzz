@@ -32,7 +32,7 @@ public class AutonBlue extends OpMode {
     private final Pose point3 = poseFactory.of(5, 5, 270);
     private final Pose loadingSpot = poseFactory.of(55.6777, 36, 90);
     private final Pose returnPose = poseFactory.of(60, 3, 90);
-    // Paths
+    //Paths
     private Path row1, row2, row3, pickup1, pickup2, pickup3, score, score1, score2, score3;
 
     private Intake intake;

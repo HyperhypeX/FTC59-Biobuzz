@@ -10,6 +10,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 public class RobotHardware {
     // Drivetrain
@@ -27,6 +29,8 @@ public class RobotHardware {
     // Outtake
     public DcMotorEx outtakeMotor;
     public DcMotorEx feederMotor;
+    public Servo outtakeServo, stopServo;
+
 
     public GamepadEx driver;
 
@@ -64,9 +68,6 @@ public class RobotHardware {
         rightFront.setDirection(RobotConstants.Drivetrain.rightFrontDirection);
         rightRear.setDirection(RobotConstants.Drivetrain.rightRearDirection);
 
-        // Hub mounts logo-up.
-        // TODO: Confirm UsbFacingDirection once the hub is bolted on - it must name the
-        // direction the USB ports physically point (FORWARD/BACKWARD/LEFT/RIGHT). Wrong
         // value rotates field-centric drive by a fixed offset.
         imu = hardwareMap.tryGet(IMU.class, "imu");
         if (imu != null) {
@@ -89,6 +90,16 @@ public class RobotHardware {
         feederMotor = hardwareMap.tryGet(DcMotorEx.class, RobotConstants.Outtake.feeder);
         if (feederMotor != null) {
             feederMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        outtakeServo = hardwareMap.get(Servo.class, RobotConstants.Outtake.outtakeServo);
+        if (outtakeServo != null) {
+            //TODO: Come back to check if this start pos is right
+            outtakeServo.setPosition(0);
+        }
+        stopServo = hardwareMap.get(Servo.class, RobotConstants.Outtake.stopServo);
+        if (stopServo != null) {
+            //TODO: Come back to check if this start pos is right
+            stopServo.setPosition(0);
         }
     }
 }
