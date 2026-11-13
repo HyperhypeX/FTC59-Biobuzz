@@ -68,8 +68,6 @@ public class RobotHardware {
         rightFront.setDirection(RobotConstants.Drivetrain.rightFrontDirection);
         rightRear.setDirection(RobotConstants.Drivetrain.rightRearDirection);
 
-        // TODO: UsbFacingDirection must name the way the hub's USB ports actually point.
-        // Still unconfirmed - a wrong value rotates field-centric drive by a fixed offset.
         imu = hardwareMap.tryGet(IMU.class, "imu");
         if (imu != null) {
             IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -91,18 +89,6 @@ public class RobotHardware {
         feederMotor = hardwareMap.tryGet(DcMotorEx.class, RobotConstants.Outtake.feeder);
         if (feederMotor != null) {
             feederMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-        // tryGet, not get: get() throws when the servo is missing from the config, which
-        // would kill the OpMode at init and also made the null checks below unreachable.
-        outtakeServo = hardwareMap.tryGet(Servo.class, RobotConstants.Outtake.outtakeServo);
-        if (outtakeServo != null) {
-            //TODO: Come back to check if this start pos is right
-            outtakeServo.setPosition(0);
-        }
-        stopServo = hardwareMap.tryGet(Servo.class, RobotConstants.Outtake.stopServo);
-        if (stopServo != null) {
-            //TODO: Come back to check if this start pos is right
-            stopServo.setPosition(0);
         }
     }
 }
