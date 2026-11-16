@@ -21,13 +21,13 @@ public class RobotConstants {
 
     public static class Intake {
         public static String intake = "intakeMotor";
-        public static double intakeVelocity = Math.PI*2;
+        public static double intakeVelocity = Math.PI*10; // rad/s = 300 RPM
     }
 
     public static class Outtake {
         public static String outtake = "outtakeMotor";
         public static String feeder = "feederMotor";
-        public static double feederVelocity = Math.PI*2;
-        public static double outtakeVelocity = Math.PI*1;
+        public static double feederVelocity = Math.PI*10; // rad/s = 300 RPM
+        public static double outtakeVelocity = 250;
     }
 }
