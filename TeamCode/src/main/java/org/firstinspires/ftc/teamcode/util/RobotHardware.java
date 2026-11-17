@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -34,8 +33,6 @@ public class RobotHardware {
 
     public GamepadEx driver;
 
-    // Limelight
-    public Limelight3A limelight;
     public TelemetryManager telemetryManager;
 
     public static RobotHardware getInstance() {
@@ -95,5 +92,3 @@ public class RobotHardware {
         }
     }
 }
-
-//adb -s de601b507c271094 uninstall com.qualcomm.ftcrobotcontroller
