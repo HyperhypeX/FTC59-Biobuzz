@@ -49,7 +49,19 @@ public class AutonRed extends LinearOpMode {
     @Override
     public void runOpMode() {
         Scheduler.reset();
-        follower = Constants.create(hardwareMap);
+        try {
+            follower = Constants.create(hardwareMap);
+        } catch (RuntimeException e) {
+            // Usually a hardware-config mismatch (e.g. no device named "pinpoint").
+            // Show it on the Driver Station instead of crashing the OpMode.
+            telemetry.addLine("Follower init FAILED - check the hardware config:");
+            telemetry.addLine(String.valueOf(e.getMessage()));
+            telemetry.update();
+            while (!isStopRequested()) {
+                sleep(50);
+            }
+            return;
+        }
         follower.setPose(autonRed1);
         follower.update();
 

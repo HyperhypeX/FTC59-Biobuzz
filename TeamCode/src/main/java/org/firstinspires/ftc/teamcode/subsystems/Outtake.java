@@ -36,7 +36,8 @@ public class Outtake implements Subsystem {
     }
 
     public void setFeederVelocity(double speed) {
-        if (!robot.outtakeMotor.isOverCurrent()) {
+        // Was checking outtakeMotor, which NPEs when there is no outtake motor configured.
+        if (!robot.feederMotor.isOverCurrent()) {
             robot.feederMotor.setVelocity(speed, AngleUnit.RADIANS);
         }
     }
