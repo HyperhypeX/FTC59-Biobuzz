@@ -59,7 +59,6 @@ public class RobotHardware {
         rightRear = hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.rightRear);
         rightFront = hardwareMap.get(DcMotorEx.class, RobotConstants.Drivetrain.rightFront);
 
-        // Directions live in RobotConstants so auton and TeleOp cannot disagree.
         leftFront.setDirection(RobotConstants.Drivetrain.leftFrontDirection);
         leftRear.setDirection(RobotConstants.Drivetrain.leftRearDirection);
         rightFront.setDirection(RobotConstants.Drivetrain.rightFrontDirection);

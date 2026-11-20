@@ -55,8 +55,7 @@ public class Teleop extends CommandOpMode {
         drivetrain = new MecanumDrive();
         configureDrive();
 
-        // The skeleton robot has no intake/outtake in its config, so those motors come
-        // back null. Everything below is null-safe: missing mechanisms are simply skipped.
+        // Everything below is null-safe: missing mechanisms are simply skipped.
         if (robot.intakeMotor != null) {
             intake = new Intake();
         }

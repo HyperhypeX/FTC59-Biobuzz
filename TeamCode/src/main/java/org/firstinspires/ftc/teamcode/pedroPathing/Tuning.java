@@ -62,7 +62,6 @@ public class Tuning {
 
     // ******************* OTHER LOCALIZERS ******************* //
     // Kept so swapping odometry hardware only means picking a different entry.
-
     @Tuner(name = "Two Wheel")
     public static Procedure twoWheel() {
         return new TwoWheelTuner();
