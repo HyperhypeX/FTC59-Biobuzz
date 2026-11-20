@@ -74,6 +74,10 @@ public class Teleop extends CommandOpMode {
     @Override
     public void run() {
         super.run();
+        if (robot.imu != null) {
+            telemetry.addData("IMU heading (deg)", "%.1f",
+                    robot.imu.getRobotYawPitchRollAngles().getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));
+        }
         telemetry.addData("Outtake", outtakeOn ? "ON" : "off");
         telemetry.addData("Outtake velocity set to (rad/s)", outtakeTarget);
         if (outtake != null) {

@@ -18,7 +18,7 @@ import static com.pedropathing.ivy.pedro.PedroCommands.hold;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name = "AutoPath", group = "Autonomous")
+@Autonomous(name = "AutoRed", group = "Autonomous")
 
 public class AutonRed extends LinearOpMode {
 
@@ -26,22 +26,24 @@ public class AutonRed extends LinearOpMode {
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose autonRed1 = poseFactory.of(56, 8, 90);
-    private final Pose moveToShoot = poseFactory.of(56, 36, 90);
-    private final Pose loadingWall = poseFactory.of(5, 36, 270);
-    private final Pose point3 = poseFactory.of(5, 5, 270);
-    private final Pose loadingSpot = poseFactory.of(55.6777, 36, 90);
-    private final Pose returnPose = poseFactory.of(60, 3, 90);
+    // Poses from the Pedro Visualizer export. Heading is in degrees.
+    private final Pose shootPos = poseFactory.of(56.0258, 2, 90);
+    private final Pose flower = poseFactory.of(10, 46.3454, 180);
+    private final Pose flowerControl = poseFactory.of(45.3203, 42.5094, 0);
+    private final Pose flowerToShootControl = poseFactory.of(29, 40, 0);
+    private final Pose shootPos2 = poseFactory.of(56.9676, 0.8788, 90);
+    private final Pose secondShoot = poseFactory.of(57.74, 132.97, 270);
+    private final Pose secondShootControl = poseFactory.of(93.96, 59.0467, 0);
 
-    // Autonomous routine
+    // Autonomous routine. Paths only for now: no intake/outtake/feeder actions yet.
     public Command autoRoutine() {
         return sequential(
-                //Case 1
-                follow(follower, line(autonRed1, moveToShoot).linear(autonRed1, moveToShoot)),
-                follow(follower, line(moveToShoot, loadingWall).linear(moveToShoot, loadingWall)),
-                follow(follower, line(loadingWall, point3).linear(loadingWall, point3)),
-                follow(follower, line(point3, loadingSpot).linear(point3, loadingSpot)),
-                follow(follower, line(loadingSpot, returnPose).linear(loadingSpot, returnPose)),
+                // shootPos -> flower
+                follow(follower, curve(shootPos, flowerControl, flower).linear(shootPos, flower)),
+                // flower -> back to the shoot position
+                follow(follower, curve(flower, flowerToShootControl, shootPos2).linear(flower, shootPos2)),
+                // shoot position -> second shoot spot
+                follow(follower, curve(shootPos2, secondShootControl, secondShoot).linear(shootPos2, secondShoot)),
                 hold(follower)
         );
     }
@@ -62,19 +64,26 @@ public class AutonRed extends LinearOpMode {
             }
             return;
         }
-        follower.setPose(autonRed1);
+        follower.setPose(shootPos);
         follower.update();
 
-        waitForStart();
+        // Before Play: keep reading the Pinpoint so the pose shows on the Driver Station.
+        // Nudge the robot by hand and watch x/y to check the Pinpoint tracks correctly.
+        // (Nothing is scheduled yet, so the follower is idle and the robot will not move.)
+        while (!isStarted() && !isStopRequested()) {
+            follower.update();
+            telemetry.addLine("Ready - place robot at start pose, then press Play");
+            addPoseTelemetry();
+            telemetry.update();
+        }
+        if (isStopRequested()) return;
         schedule(autoRoutine());
 
         while (opModeIsActive()) {
             follower.update();
             Scheduler.execute();
 
-            telemetry.addData("x", follower.pose().x());
-            telemetry.addData("y", follower.pose().y());
-            telemetry.addData("heading", follower.pose().heading());
+            addPoseTelemetry();
 
             if (follower.currentPath() != null) {
                 telemetry.addData("Current path distance remaining", follower.distanceToEndpoint());
@@ -83,5 +92,11 @@ public class AutonRed extends LinearOpMode {
 
             telemetry.update();
         }
+    }
+
+    private void addPoseTelemetry() {
+        telemetry.addData("x (in)", "%.2f", follower.pose().x());
+        telemetry.addData("y (in)", "%.2f", follower.pose().y());
+        telemetry.addData("heading (deg)", "%.1f", Math.toDegrees(follower.pose().heading()));
     }
 }
